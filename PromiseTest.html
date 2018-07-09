@@ -2,9 +2,78 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>$Title$</title>
+    <title>PromiseTest</title>
+    <style>
+        div {
+            border: 1px red dashed;
+        }
+    </style>
 </head>
 <body>
-$END$
+<div>
+    <h2>简单实例</h2>
+    <button onclick="success()">成功</button>
+    <button onclick="failure()">失败</button>
+    <p id="result"></p>
+    <script>
+        function successPromise(arg1) {
+            let p = new Promise(function (resolve, reject) {
+                setTimeout(() => {
+                    resolve({key1: '耶', key2: '成功', key3: arg1}); //代码正常执行！
+                }, 1000);
+            })
+            return p
+        }
+
+        function success() {
+            successPromise('参数1').then(function (msg) {
+                document.getElementById("result").innerHTML = JSON.stringify(msg);
+            }).finally(() => {
+                document.getElementById("result").insertAdjacentHTML('beforeend', 'finally')
+            })
+        }
+
+        function failure() {
+
+        }
+    </script>
+</div>
+
+
+<div style="position: relative; overflow: auto">
+    <h2>后台请求 （考虑超时问题）</h2>
+    <div style="border-color: blue; width: 50%; float: left">
+        <h3>前台</h3>
+        <button onclick="request()">请求登录</button>
+        <p id="p-wait-timer"></p>
+        <p id="client-result"></p>
+    </div>
+    <div style="border-color: blue; max-width: 50%; min-width: 48%; float: right">
+        <h3>后台</h3>
+        <button onclick="responsive()">允许登录</button>
+    </div>
+    <script>
+        let resposeCallback = null
+        function request() {
+            let arg1 = 10
+            let responsePromise = new Promise(function (resolve, reject) {
+                console.log('父参数', arg1)
+                resposeCallback = function() {
+                    resolve('成功')
+                }
+                setTimeout(reject, 3000, '超时')
+            })
+
+            responsePromise.then(function (msg) {
+                console.log('登录成功', msg)
+            }, function (msg) {
+                console.log('登录失败',msg)
+            })
+        }
+        function responsive() {
+            resposeCallback()
+        }
+    </script>
+</div>
 </body>
 </html>
