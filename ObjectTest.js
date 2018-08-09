@@ -42,3 +42,16 @@
     console.log(obj1) // => {}
     console.log(obj2) // => {}
 });
+
+(function () {
+    console.log('----------------------------类中的成员变量并不会提前初始化------------------------------------------')
+    class A {
+        constructor () {
+            var a = this.a
+            console.log(a) // result => undefined
+            this.a = 333
+        }
+    }
+
+    let a = new A()
+});
