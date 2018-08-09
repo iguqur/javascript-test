@@ -55,3 +55,21 @@
 
     let a = new A()
 });
+
+(function () {
+    console.log('----------------------------在对象中获取成员函数------------------------------------------')
+    class A {
+        constructor () {
+            let { commit } = this
+
+            commit() // result => 'aaaaaaa'
+            this.__proto__.commit() // result => 'aaaaaaa'
+        }
+
+        commit () {
+            console.log('aaaaaaa')
+        }
+    }
+
+    let a = new A()
+});
